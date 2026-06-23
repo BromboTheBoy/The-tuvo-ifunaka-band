@@ -93,9 +93,10 @@
       position: relative; z-index: 2;
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900; font-size: clamp(2.8rem, 6.5vw, 6.5rem);
-      line-height: 1; text-transform: uppercase;
+      line-height: 1.05; text-transform: uppercase;
       color: var(--parchment);
       letter-spacing: 0.01em;
+      display: flex; flex-direction: column;
     }
 
     .hero-title span.accent { color: var(--amber); }
@@ -409,10 +410,10 @@
     <canvas id="waveCanvas"></canvas>
     <p class="hero-eyebrow">A Ball Haus Club</p>
     <h1 class="hero-title">
-      <span class="accent">The</span><br>
-      Tuvo<br>
-      <span class="accent">Ifunaka</span><br>
-      Band
+      <span class="accent">The</span>
+      <span>Tuvo</span>
+      <span class="accent">Ifunaka</span>
+      <span>Band</span>
     </h1>
     <p class="hero-sub">
       Welcome to our village.<br>
