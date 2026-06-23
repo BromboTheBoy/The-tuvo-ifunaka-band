@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TUVO IFUNAKA BAND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0D0D1A;
+      --amber:    #E8A44A;
+      --terra:    #C05E3C;
+      --parchment:#F0EBE0;
+      --sage:     #4A6650;
+      --mid:      #1A1A2E;
+      --dim:      rgba(240,235,224,0.45);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--parchment);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, rgba(13,13,26,0.95) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1.1rem;
+      letter-spacing: 0.18em; color: var(--amber);
+      text-transform: uppercase; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.12em; color: var(--dim);
+      text-decoration: none; text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--parchment); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      overflow: hidden;
+    }
+
+    /* grain texture overlay */
+    #hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 200px 200px; opacity: 0.4; pointer-events: none;
+    }
+
+    /* diagonal amber glow */
+    #hero::after {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 60% 55% at 80% 30%, rgba(232,164,74,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 20% 70%, rgba(192,94,60,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* waveform canvas */
+    #waveCanvas {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1; opacity: 0.25; pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      position: relative; z-index: 2;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.22em;
+      color: var(--amber); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      position: relative; z-index: 2;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: clamp(2.8rem, 6.5vw, 6.5rem);
+      line-height: 1; text-transform: uppercase;
+      color: var(--parchment);
+      letter-spacing: 0.01em;
+    }
+
+    .hero-title span.accent { color: var(--amber); }
+
+    .hero-sub {
+      position: relative; z-index: 2;
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+      color: var(--dim); margin-top: 1.8rem;
+      max-width: 420px; line-height: 1.65;
+    }
+
+    .hero-cta {
+      position: relative; z-index: 2;
+      display: inline-flex; align-items: center; gap: 0.9rem;
+      margin-top: 2.5rem;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--navy); background: var(--amber);
+      padding: 0.9rem 2rem; text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .hero-cta:hover { background: var(--parchment); transform: translateY(-2px); }
+    .hero-cta svg { flex-shrink: 0; }
+
+    /* origin tag */
+    .origin-tag {
+      position: absolute; z-index: 2;
+      right: 3rem; bottom: 5rem;
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.18em; color: var(--sage);
+      text-transform: uppercase; writing-mode: vertical-rl;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(232,164,74,0.35), transparent);
+    }
+
+    /* ── BAND SECTION ── */
+    #band {
+      padding: 7rem 3rem;
+      background: var(--mid);
+    }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.2em; color: var(--amber); text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: clamp(2.2rem, 5vw, 3.8rem);
+      text-transform: uppercase; letter-spacing: 0.02em;
+      line-height: 1;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.5px;
+    }
+
+    .member-card {
+      position: relative; overflow: hidden;
+      background: var(--navy);
+      padding: 2.8rem 2rem 2.5rem;
+      cursor: default;
+      transition: background 0.3s;
+    }
+    .member-card:hover { background: #111128; }
+
+    .member-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--terra); transform: scaleX(0);
+      transform-origin: left; transition: transform 0.35s;
+    }
+    .member-card:hover::before { transform: scaleX(1); }
+
+    .member-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%; background: rgba(232,164,74,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.8rem;
+    }
+    .member-icon svg { color: var(--amber); }
+
+    .member-initial {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1.5rem;
+      color: var(--amber);
+    }
+
+    .member-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 1.6rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .member-role {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.16em; color: var(--sage);
+      text-transform: uppercase; margin-bottom: 1.3rem;
+    }
+
+    .member-desc {
+      font-size: 0.875rem; line-height: 1.7;
+      color: var(--dim);
+    }
+
+    /* ── ALBUM SECTION ── */
+    #album {
+      padding: 7rem 3rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+
+    .album-art {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, var(--terra) 0%, #1a0a0a 50%, var(--sage) 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .album-art-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+    }
+
+    .album-art-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-transform: uppercase;
+      line-height: 0.9;
+      color: var(--parchment);
+      letter-spacing: 0.02em;
+    }
+
+    .album-art-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: rgba(240,235,224,0.55);
+      text-transform: uppercase;
+      margin-top: 1.1rem;
+    }
+
+    /* vinyl rings */
+    .album-art::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at center, transparent 28%, rgba(0,0,0,0.25) 29%, rgba(0,0,0,0.25) 30%, transparent 31%),
+        radial-gradient(circle at center, transparent 45%, rgba(0,0,0,0.15) 46%, rgba(0,0,0,0.15) 47%, transparent 48%),
+        radial-gradient(circle at center, transparent 62%, rgba(0,0,0,0.1) 63%, rgba(0,0,0,0.1) 64%, transparent 65%);
+    }
+
+    .coming-soon-badge {
+      position: absolute; top: 1.4rem; right: 1.4rem;
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      background: var(--amber); color: var(--navy);
+      padding: 0.45rem 0.8rem;
+    }
+
+    .album-info .section-header { margin-bottom: 2rem; }
+
+    .album-desc {
+      font-size: 1rem; line-height: 1.85;
+      color: var(--dim); margin-bottom: 2.5rem;
+    }
+
+    .notify-form {
+      display: flex; gap: 0;
+    }
+    .notify-input {
+      flex: 1; background: rgba(240,235,224,0.07);
+      border: 1px solid rgba(240,235,224,0.15); border-right: none;
+      padding: 0.85rem 1.2rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
+      color: var(--parchment); outline: none;
+    }
+    .notify-input::placeholder { color: rgba(240,235,224,0.3); }
+    .notify-input:focus { border-color: var(--amber); }
+    .notify-btn {
+      background: var(--terra); border: none;
+      padding: 0.85rem 1.6rem;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--parchment); cursor: pointer;
+      transition: background 0.25s;
+    }
+    .notify-btn:hover { background: var(--amber); color: var(--navy); }
+
+    /* ── ORIGIN STORY ── */
+    #origin {
+      padding: 7rem 3rem;
+      background: var(--mid);
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 5rem; align-items: start;
+    }
+
+    .origin-pull {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300; font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.15;
+      color: var(--amber);
+      font-style: italic;
+      position: sticky; top: 8rem;
+    }
+
+    .origin-body p {
+      font-size: 1rem; line-height: 1.9;
+      color: var(--dim); margin-bottom: 1.5rem;
+    }
+    .origin-body p:last-child { margin-bottom: 0; }
+
+    .origin-place {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 2.5rem;
+    }
+    .origin-place-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--terra); flex-shrink: 0;
+    }
+    .origin-place-text {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--sage);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3.5rem 3rem;
+      border-top: 1px solid rgba(240,235,224,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1.3rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    .footer-meta {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(240,235,224,0.25);
+    }
+
+    .social-links { display: flex; gap: 1.5rem; }
+    .social-links a {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(240,235,224,0.35); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .social-links a:hover { color: var(--amber); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 0 1.5rem 4rem; }
+      #band, #origin { padding: 5rem 1.5rem; }
+      #album {
+        padding: 5rem 1.5rem;
+        grid-template-columns: 1fr; gap: 3rem;
+      }
+      #origin { grid-template-columns: 1fr; gap: 2.5rem; }
+      .origin-pull { position: static; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .origin-tag { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      #waveCanvas { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">T·I·B</a>
+    <ul class="nav-links">
+      <li><a href="#band">The Band</a></li>
+      <li><a href="#album">Album</a></li>
+      <li><a href="#origin">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="waveCanvas"></canvas>
+    <p class="hero-eyebrow">A Ball Haus Club</p>
+    <h1 class="hero-title">
+      <span class="accent">The</span><br>
+      Tuvo<br>
+      <span class="accent">Ifunaka</span><br>
+      Band
+    </h1>
+    <p class="hero-sub">
+      Welcome to our village.<br>
+      Experience the soul of Ungazi.
+    </p>
+    <a href="#album" class="hero-cta">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="7" cy="7" r="6"/><polygon points="5.5,4.5 10,7 5.5,9.5" fill="currentColor" stroke="none"/>
+      </svg>
+      Debut Album Coming Soon
+    </a>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BAND MEMBERS -->
+  <section id="band">
+    <div class="section-header reveal">
+      <span class="section-label">The Band</span>
+      <h2 class="section-title">Meet the Four</h2>
+    </div>
+    <div class="members-grid">
+
+      <div class="member-card reveal">
+        <div class="member-icon"><span class="member-initial">JH</span></div>
+        <p class="member-role">Vocalist &amp; Songwriter</p>
+        <h3 class="member-name">Jaja Haylu</h3>
+        <p class="member-desc">Songwriter and the visionary behind the debut album's concept. Jaja's voice carries the weight of Ungazi's history — tender in the verses, thunderous in the chorus.</p>
+      </div>
+
+      <div class="member-card reveal">
+        <div class="member-icon"><span class="member-initial">PA</span></div>
+        <p class="member-role">Instruments &amp; Music Theory</p>
+        <h3 class="member-name">Petr Awapo</h3>
+        <p class="member-desc">A musical genius with classical and contemporary training, Petr brings deep mastery of instruments and music theory that forms the harmonic backbone of the band.</p>
+      </div>
+
+      <div class="member-card reveal">
+        <div class="member-icon"><span class="member-initial">TB</span></div>
+        <p class="member-role">Isikuti Tradition</p>
+        <h3 class="member-name">Tabbow</h3>
+        <p class="member-desc">Rooted in the Isikuti music tradition, Tabbow's percussion carries the pulse of a living culture — ancient rhythms reborn at the heart of every performance.</p>
+      </div>
+
+      <div class="member-card reveal">
+        <div class="member-icon"><span class="member-initial">TW</span></div>
+        <p class="member-role">Vocalist</p>
+        <h3 class="member-name">Tsolita Wardati</h3>
+        <p class="member-desc">The emotional anchor of Tuvo Ifunaka, Tsolita turns memory into melody with a poet's precision.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ALBUM -->
+  <section id="album">
+    <div class="album-art reveal">
+      <div class="album-art-inner">
+        <p class="album-art-sub">Debut Album</p>
+        <h2 class="album-art-title">Ungazi<br>The<br>Village</h2>
+        <p class="album-art-sub" style="margin-top:1.5rem;">Tuvo Ifunaka Band</p>
+      </div>
+      <span class="coming-soon-badge">Coming Soon</span>
+    </div>
+
+    <div class="album-info">
+      <div class="section-header reveal">
+        <span class="section-label">Debut Album</span>
+        <h2 class="section-title">Ungazi<br>The Village</h2>
+      </div>
+      <p class="album-desc reveal">
+        Their first album is a love letter to the place that made them — the landscapes, the voices, the rituals, and the silences of Ungazi. Recorded live to capture the raw energy of a band that has never needed a studio to fill a room.
+      </p>
+      <p class="album-desc reveal" style="margin-bottom: 2.5rem;">
+        Be the first to know when it drops. Leave your email and we'll reach you the moment it's live.
+      </p>
+      <div class="notify-form reveal">
+        <input class="notify-input" type="email" placeholder="your@email.com" aria-label="Email address" />
+        <button class="notify-btn" onclick="handleNotify(event)">Notify Me</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ORIGIN STORY -->
+  <section id="origin">
+    <div class="origin-pull reveal">
+      "We don't make music about Ungazi. We make music that&nbsp;<em>is</em>&nbsp;Ungazi."
+    </div>
+    <div class="origin-body">
+      <div class="origin-place reveal">
+        <span class="origin-place-dot"></span>
+        <span class="origin-place-text">Ungazi &mdash; The Village</span>
+      </div>
+      <div class="reveal">
+        <p>Tuvo Ifunaka Band formed in the village of Ungazi, where music has always been a communal act — sung at harvests, at crossroads, at the edge of rivers at dusk. The name Tuvo Ifunaka means something close to <em>"voices that find each other"</em> in the local tradition, and the group live up to every syllable of it.</p>
+        <p>Jaja, Petr, Tabbow, and Tsolita grew up in the same few square miles of Ungazi, each shaped by different corners of its musical life. They began playing together informally, then couldn't stop. What started as late evenings on somebody's porch has grown into something that has drawn crowds across the region.</p>
+        <p>Their debut album, <em>Ungazi The Village</em>, is their way of fixing that place and its stories in sound — before time moves on and changes it. It is an act of preservation as much as it is an act of art.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Tuvo Ifunaka Band</span>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">SoundCloud</a>
+      <a href="#">Spotify</a>
+    </div>
+    <span class="footer-meta">Ungazi &mdash; &copy; 2024</span>
+  </footer>
+
+  <script>
+    /* ── WAVEFORM ANIMATION ── */
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    let animId, W, H, t = 0;
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function drawWave() {
+      ctx.clearRect(0, 0, W, H);
+
+      const waves = [
+        { amp: H * 0.06, freq: 0.008, speed: 0.012, yOff: 0.38, color: 'rgba(232,164,74,0.55)', lw: 1.5 },
+        { amp: H * 0.04, freq: 0.013, speed: 0.019, yOff: 0.48, color: 'rgba(192,94,60,0.4)',  lw: 1.2 },
+        { amp: H * 0.05, freq: 0.006, speed: 0.008, yOff: 0.58, color: 'rgba(74,102,80,0.35)', lw: 1.0 },
+      ];
+
+      waves.forEach(w => {
+        ctx.beginPath();
+        ctx.lineWidth = w.lw;
+        ctx.strokeStyle = w.color;
+        for (let x = 0; x <= W; x += 2) {
+          const y = H * w.yOff + Math.sin(x * w.freq + t * w.speed * 60) * w.amp
+                                + Math.sin(x * w.freq * 2.1 + t * w.speed * 40) * w.amp * 0.4;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+
+      t++;
+      animId = requestAnimationFrame(drawWave);
+    }
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      drawWave();
+    }
+
+    /* ── SCROLL REVEAL ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => obs.observe(el));
+
+    /* ── NOTIFY FORM ── */
+    function handleNotify(e) {
+      const btn = e.target;
+      const input = btn.previousElementSibling;
+      if (!input.value || !input.value.includes('@')) {
+        input.style.borderColor = '#C05E3C';
+        input.focus();
+        return;
+      }
+      btn.textContent = "You're In ✓";
+      btn.style.background = '#4A6650';
+      btn.style.color = '#F0EBE0';
+      input.disabled = true; btn.disabled = true;
+    }
+  </script>
+</body>
+</html>
