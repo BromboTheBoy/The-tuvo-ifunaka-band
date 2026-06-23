@@ -56,7 +56,7 @@
     #hero {
       position: relative; min-height: 100vh;
       display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 3rem 5rem;
+      padding: 6rem 3rem 5rem;
       overflow: hidden;
     }
 
@@ -82,10 +82,10 @@
     }
 
     .hero-eyebrow {
-      position: relative; z-index: 2;
+      position: relative; z-index: 10;
       font-family: 'DM Mono', monospace;
-      font-size: 0.72rem; letter-spacing: 0.22em;
-      color: var(--amber); text-transform: uppercase;
+      font-size: 0.9rem; letter-spacing: 0.28em;
+      color: var(--parchment); text-transform: uppercase;
       margin-bottom: 1.2rem;
     }
 
@@ -375,7 +375,7 @@
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
-      #hero { padding: 0 1.5rem 4rem; }
+      #hero { padding: 5rem 1.5rem 4rem; }
       #band, #origin { padding: 5rem 1.5rem; }
       #album {
         padding: 5rem 1.5rem;
@@ -434,7 +434,7 @@
   <section id="band">
     <div class="section-header reveal">
       <span class="section-label">The Band</span>
-      <h2 class="section-title">Meet the Four</h2>
+      <h2 class="section-title">Meet the Four Members</h2>
     </div>
     <div class="members-grid">
 
